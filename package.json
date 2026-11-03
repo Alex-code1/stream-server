@@ -1,0 +1,16 @@
+{
+  "name": "beambooth",
+  "version": "1.0.0",
+  "description": "BeamBooth - stream and receive a desktop share over the local network",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {
+    "selfsigned": "^5.5.0",
+    "ws": "^8.18.0"
+  }
+}

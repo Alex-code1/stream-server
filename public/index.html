@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeamBooth</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9A%A8%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ============================ LANDING ============================ -->
+  <section id="landing" class="screen">
+    <div class="landing-inner">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="15" height="11" rx="2"></rect>
+            <path d="M7 19h5"></path>
+            <path d="M9.5 15v4"></path>
+            <path d="M19 8l3 2-3 2"></path>
+            <path d="M19 12h3"></path>
+          </svg>
+        </div>
+        <h1>BeamBooth</h1>
+        <p class="tagline">Beam your desktop to any device on the local network.</p>
+      </div>
+
+      <div class="card">
+        <label class="field-label" for="deviceName">Device name</label>
+        <input id="deviceName" type="text" maxlength="64" placeholder="My PC" autocomplete="off" spellcheck="false" />
+
+        <div class="role-buttons">
+          <button id="btnSender" class="role-btn sender">
+            <span class="role-icon">📤</span>
+            <span class="role-title">I'm a Sender</span>
+            <span class="role-sub">Share screen or camera</span>
+          </button>
+          <button id="btnReceiver" class="role-btn receiver">
+            <span class="role-icon">📺</span>
+            <span class="role-title">I'm a Receiver</span>
+            <span class="role-sub">Show a remote screen</span>
+          </button>
+        </div>
+
+        <p class="hint">Tip: open this page with <code>?role=sender</code> or <code>?role=receiver</code> (and <code>?device=Name</code>) to skip this screen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ SENDER ============================= -->
+  <section id="sender" class="screen hidden">
+    <header class="topbar">
+      <div class="topbar-brand">
+        <span class="dot"></span> BeamBooth <span class="muted">· sender</span>
+      </div>
+      <div class="topbar-status" id="senderStatus">Connecting…</div>
+    </header>
+
+    <div class="sender-body">
+      <!-- Receiver list -->
+      <div id="senderListWrap" class="sender-list-wrap">
+        <h2>Available receivers</h2>
+        <p class="muted">Devices on this network that are ready to receive. Click one to start sharing.</p>
+
+        <div class="capture-mode">
+          <span class="capture-mode-label">Share</span>
+          <div class="capture-mode-toggle" id="captureModeToggle">
+            <button type="button" class="mode-opt active" data-mode="screen">🖥️ Screen</button>
+            <button type="button" class="mode-opt" data-mode="camera">📷 Camera</button>
+          </div>
+          <p class="muted capture-mode-hint" id="captureModeHint"></p>
+          <label id="cameraAudioOption" class="camera-audio hidden">
+            <input id="cameraAudio" type="checkbox" checked /> Include microphone audio
+          </label>
+        </div>
+
+        <p id="captureError" class="capture-error hidden" role="alert"></p>
+        <div id="receiverList" class="receiver-list"></div>
+        <div id="noReceivers" class="empty hidden">
+          <div class="empty-icon">📡</div>
+          <p>No receivers found yet.</p>
+          <p class="muted">Open BeamBooth on another device and choose “I'm a Receiver”.</p>
+        </div>
+      </div>
+
+      <!-- Sharing state -->
+      <div id="senderSharing" class="sharing hidden">
+        <div class="sharing-card">
+          <div class="sharing-icon">🟢</div>
+          <h2>Sharing to <span id="shareTargetName">…</span></h2>
+          <p class="muted" id="shareTargetIp"></p>
+          <p class="sharing-mode" id="shareModeLabel"></p>
+          <button id="btnStopShare" class="btn danger">Stop sharing</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== RECEIVER =========================== -->
+  <section id="receiver" class="screen hidden">
+    <!-- Idle: show device name + IP -->
+    <div id="receiverIdle" class="receiver-idle">
+      <div class="brand small">
+        <h1>BeamBooth</h1>
+        <p class="tagline">Ready to receive</p>
+      </div>
+      <div class="card idle-card">
+        <div class="idle-icon">📺</div>
+        <div class="idle-name" id="receiverDeviceName">…</div>
+        <div class="idle-ip" id="receiverIp">…</div>
+        <p class="muted">Waiting for a sender…</p>
+        <p class="hint">Senders on this network will see this device automatically.</p>
+      </div>
+    </div>
+
+    <!-- Connected: full remote screen -->
+    <div id="receiverLive" class="receiver-live hidden">
+      <video id="remoteVideo" autoplay playsinline></video>
+      <div class="live-bar" id="liveBar">
+        <span>Receiving from <strong id="liveSenderName">…</strong></span>
+        <span class="live-bar-actions">
+          <button id="btnUnmute" class="btn small hidden">🔇 Unmute</button>
+          <button id="btnStopReceive" class="btn danger small">Stop</button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shared toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
